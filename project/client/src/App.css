@@ -10,6 +10,15 @@
   align-items: center;
   justify-content: center;
 }
+.d-flex {
+  display: flex;
+}
+.flex-column {
+  flex-direction: column;
+}
+.align-items-center {
+  align-items: center;
+}
 .flex-1{
   flex: 1;
 }
