@@ -1,37 +1,34 @@
-import { Tabs } from 'antd';
+import { message, Tabs } from 'antd';
 import Bookings from './Bookings';
-import { useEffect } from 'react';
-import { GetCurrentUser } from '../../calls/users';
-import { message } from 'antd';
-import { useNavigate } from 'react-router-dom';
-
+import axios from "axios";
+import {useNavigate} from 'react-router-dom';
 
 const Profile = () => {
   const navigate = useNavigate();
-
-  const checkUser = async () => {
-    try {
-      const response = await GetCurrentUser();
-      if (response.success) {
-        const user = response.data;
-        if (user.role === "admin" || user.role === "partner") {
-          message.error("You are not authorized to view this page");
-          navigate("/"+user.role);
-        }
-      }
-    } catch (error) {
-      message.error(error.message);
-      navigate("/login");
-    }
-  }
-
-  useEffect(() => {
-    checkUser();
-  }, []);
-
     // const onChange = (key) => {
     //     console.log(key);
     //   };
+    const checkUser = async () => {
+      const user = await axios.get("http://localhost:9000/api/users/get-current-user", {
+          headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+      });
+
+      if (user.data.data.role === "partner" ) {
+          navigate("/partner");
+          message.error("You are not allowed to access this page");
+      }
+      if (user.data.data.role === "admin" ) {
+          navigate("/admin");
+          message.error("You are not allowed to access this page");
+      }
+      else {
+
+      }
+  }
+  checkUser();
+  
       const items = [
         {
           key: '1',
